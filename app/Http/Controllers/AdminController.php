@@ -131,8 +131,10 @@ class AdminController extends Controller
         if ($activity->save()) {
             if ($request->user != 'ALL USERS') {
                 $userIds = $request->user;
-                $activity->users()->sync($userIds);
+            } else {
+                $userIds = User::where('role', 'USER')->get()->pluck('id');
             }
+            $activity->users()->sync($userIds);
             $notification = array(
                 'message' => 'Activity Edit successfully!',
                 'alert-type' => 'success'
